@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  server:
+    container_name: wc-server
+    restart: always
+    image: wc-server
+    environment:
+      - PORT=8000
+      - DATABASE_URL="mongodb+srv://user1:password14022001@ecommerce.2t3kdvl.mongodb.net/Ecommerce"
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports: 
+      - '8000:8000'
+    networks:
+      - shared-network
+  client:
+    container_name: wc-client
+    restart: always
+    image: wc-client
+    environment:
+      - HOST="http://localhost:8000"
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports: 
+      - '3000:3000'
+    networks:
+      - shared-network
+    depends_on:
+      - server
+networks:
+  shared-network:
